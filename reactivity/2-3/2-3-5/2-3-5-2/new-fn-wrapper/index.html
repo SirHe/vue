@@ -1,0 +1,37 @@
+<!-- test.html -->
+<html lang="en">
+  <body>
+    <div id="app">
+      <div id="outer"></div>
+      <div>-----------</div>
+      <div id="inner"></div>
+    </div>
+    <script type="module">
+      import { reactive } from './reactive.js'
+      import { effect } from './effect.js'
+      import { sleep } from './utils.js'
+
+      const innerRender = () => {
+        const dom = document.querySelector('#inner')
+        dom.innerHTML = 'inner-' + reactivityInnerData.a
+      }
+
+      const outerRender = () => {
+        const dom = document.querySelector('#outer')
+        effect(innerRender)
+        dom.innerHTML = 'outer-' + reactivityOuterData.a
+      }
+
+      const reactivityOuterData = reactive({ a: 'hello' })
+      const reactivityInnerData = reactive({ a: 'hello' })
+      effect(outerRender)
+      const work = async () => {
+        await sleep(1000)
+        reactivityInnerData.a = 'world'
+        await sleep(1000)
+        reactivityOuterData.a = 'world'
+      }
+      work()
+    </script>
+  </body>
+</html>

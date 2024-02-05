@@ -1,0 +1,18 @@
+<!-- test2.html -->
+<html lang="en">
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import { reactive } from './reactive.js'
+      import { effect } from './effect.js'
+
+      const render = () => {
+        const dom = document.querySelector('#app')
+        dom.innerHTML = reactivityData.a++
+      }
+
+      const reactivityData = reactive({ a: 1 })
+      effect(render)
+    </script>
+  </body>
+</html>

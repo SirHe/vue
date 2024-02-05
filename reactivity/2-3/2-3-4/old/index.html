@@ -1,0 +1,34 @@
+<!-- index.html -->
+<html lang="en">
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import { reactive } from './reactive.js'
+      import { effect } from './effect.js'
+      import { sleep } from './utils.js'
+
+      const render = () => {
+        console.log('render')
+        const dom = document.querySelector('#app')
+        dom.innerHTML = reactivityData.a ? reactivityData.b : reactivityData.c
+      }
+
+      const originalData = { a: true, b: 'hello', c: 'world' }
+      const reactivityData = reactive(originalData)
+      effect(render)
+
+      const work = async () => {
+        await sleep(1000)
+        console.log(1)
+        reactivityData.c = 'hello'
+        await sleep(1000)
+        console.log(2)
+        reactivityData.a = false
+        await sleep(1000)
+        console.log(3)
+        reactivityData.b = 'world'
+      }
+      work()
+    </script>
+  </body>
+</html>

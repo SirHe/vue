@@ -1,0 +1,15 @@
+<html lang="en">
+  <body>
+    <!-- <div id="app">v-if="true"</div> -->
+    <!-- <div id="app">:class="myClass"</div> -->
+    <!-- <div id="app">@click.stop.once="onClick"</div> -->
+    <div id="app">@[xxx]="onClick"</div>
+    <script type="module">
+      import Tokenizer from './tokenizer.js'
+      const sourceCode = document.querySelector('#app').innerHTML
+      const tokenizer = new Tokenizer()
+      const parseResult = tokenizer.parse(sourceCode)
+      console.log(parseResult)
+    </script>
+  </body>
+</html>

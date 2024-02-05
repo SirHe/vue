@@ -1,0 +1,37 @@
+<!-- index.html -->
+<html lang="en">
+  <body>
+    <div id="app">
+      <div id="box1"></div>
+      <div>----------</div>
+      <div id="box2"></div>
+    </div>
+    <script type="module">
+      import { reactive } from './reactive.js'
+      import { effect } from './effect.js'
+      import { sleep } from './utils.js'
+      const render1 = () => {
+        const dom = document.querySelector('#box1')
+        dom.innerHTML = reactivityData1.a
+      }
+      const render2 = () => {
+        const dom = document.querySelector('#box2')
+        dom.innerHTML = reactivityData2.b
+      }
+
+      const reactivityData1 = reactive({ a: 'hello' })
+      const reactivityData2 = reactive({ b: 'world' })
+
+      effect(render1)
+      effect(render2)
+
+      const work = async () => {
+        await sleep(1000)
+        reactivityData1.a = 'world'
+        await sleep(1000)
+        reactivityData1.a = 'hello'
+      }
+      work()
+    </script>
+  </body>
+</html>

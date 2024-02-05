@@ -1,0 +1,24 @@
+<!-- index.html -->
+<html lang="en">
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import { reactive } from './reactive.js'
+      import { effect } from './effect.js'
+      // 渲染函数
+      const render = () => {
+        const dom = document.querySelector('#app')
+        dom.innerHTML = reactivityData.a
+      }
+
+      // 响应式数据
+      const originalData = { a: 'hello' }
+      const reactivityData = reactive(originalData)
+      // 渲染页面
+      effect(render) // 交给effect函数去代理执行
+      setTimeout(() => {
+        reactivityData.a = 'world'
+      }, 1000)
+    </script>
+  </body>
+</html>

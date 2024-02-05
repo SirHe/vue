@@ -1,0 +1,28 @@
+<!-- index.html -->
+<html lang="en">
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import { reactive } from './reactive.js'
+      import { computed } from './computed.js'
+      import { effect } from './effect.js'
+
+      const render = () => {
+        const dom = document.querySelector('#app')
+        dom.innerHTML = computedData.value
+      }
+
+      const reactivityData1 = reactive({ a: 'hello' })
+      const reactivityData2 = reactive({ a: 'world' })
+
+      const computedData = computed(
+        () => `${reactivityData1.a} ${reactivityData2.a}`
+      )
+      effect(render)
+
+      setTimeout(() => {
+        reactivityData1.a = 'hello1'
+      }, 1000)
+    </script>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+<!-- index.html -->
+<html lang="en">
+  <body>
+    <div id="app"></div>
+    <script>
+      // 渲染函数
+      const render = () => {
+        const dom = document.querySelector('#app')
+        dom.innerHTML = data.a
+      }
+
+      // 响应式数据
+      const data = { a: 'hello' }
+
+      // 渲染页面
+      render() // 实际上是vue帮我们调用render的，这里我们先自己手动调用一下
+      setTimeout(() => {
+        data.a = 'world'
+        render() // 现在是手动调用render，最终期望的是自动
+      }, 1000)
+    </script>
+  </body>
+</html>

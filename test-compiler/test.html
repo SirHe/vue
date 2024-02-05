@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <div id="foo" v-if="true">hello {{ name }}</div>
+      <div id="123"></div>
+    </div>
+    <![CDATA[ function myFunction() { alert("Hello, World!"); } ]]>
+    <script type="module">
+      const input = document.querySelector('#app').innerHTML
+      console.log(input)
+    </script>
+  </body>
+</html>

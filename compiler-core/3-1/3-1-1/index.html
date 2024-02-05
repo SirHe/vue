@@ -1,0 +1,11 @@
+<html lang="en">
+  <body>
+    <script type="module">
+      import Tokenizer from './tokenizer.js'
+      const sourceCode = 'let a = 1'
+      const tokenizer = new Tokenizer()
+      const parseResult = tokenizer.parse(sourceCode)
+      console.log(parseResult)
+    </script>
+  </body>
+</html>

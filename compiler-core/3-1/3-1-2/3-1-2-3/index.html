@@ -1,0 +1,16 @@
+<html lang="en">
+  <body>
+    <div id="app">
+      <div id="x1" @[click]="onClick" :class="myClass" v-for="item in arr">
+        hello
+      </div>
+    </div>
+    <script type="module">
+      import Tokenizer from './tokenizer.js'
+      const sourceCode = document.querySelector('#app').innerHTML
+      const tokenizer = new Tokenizer()
+      const parseResult = tokenizer.parse(sourceCode)
+      console.log(parseResult)
+    </script>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+<!-- index.html -->
+<html lang="en">
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import { reactive } from './reactive.js'
+      import { effect } from './effect.js'
+      import { sleep } from './utils.js'
+
+      const render = () => {
+        const dom = document.querySelector('#app')
+        dom.innerHTML = `
+              <ul>
+                <li>${obj3.obj1.a}</li>
+                <li>${obj3.b}</li>
+              <ul>`
+      }
+
+      const obj1 = { a: 123 }
+      const obj2 = { obj1, b: 456 }
+      const obj3 = reactive(obj2)
+      effect(render)
+
+      const work = async () => {
+        await sleep(1000)
+        obj3.b = 'world'
+        await sleep(1000)
+        const obj = obj3.obj1
+        obj.a = 'hello'
+        console.log(obj1.a, obj === obj1)
+      }
+      work()
+    </script>
+  </body>
+</html>

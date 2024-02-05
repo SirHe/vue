@@ -1,0 +1,48 @@
+<!-- index.html -->
+<html lang="en">
+  <body>
+    <div id="app">
+      <div id="box1"></div>
+      <div>----------</div>
+      <div id="box2"></div>
+      <div>----------</div>
+      <div id="box3"></div>
+    </div>
+    <script type="module">
+      import { reactive } from './reactive.js'
+      import { effect } from './effect.js'
+      import { sleep } from './utils.js'
+      const render1 = () => {
+        const dom = document.querySelector('#box1')
+        dom.innerHTML = Object.values(reactivityData1).join(',')
+      }
+      const render2 = () => {
+        const dom = document.querySelector('#box2')
+        dom.innerHTML = 'a' in reactivityData2
+      }
+      const render3 = () => {
+        const dom = document.querySelector('#box3')
+        dom.innerHTML = reactivityData3.a
+      }
+
+      // 1、遍历
+      const reactivityData1 = reactive({ a: 'hello' })
+      // 2、属性检测
+      const reactivityData2 = reactive({ b: 'world' })
+      // 3、删除属性
+      const reactivityData3 = reactive({ a: 'hello' })
+      effect(render1)
+      effect(render2)
+      effect(render3)
+      const work = async () => {
+        await sleep(1000)
+        reactivityData1.b = 'world'
+        await sleep(1000)
+        reactivityData2.a = 'hello'
+        await sleep(1000)
+        delete reactivityData3.a
+      }
+      work()
+    </script>
+  </body>
+</html>
