@@ -1,26 +1,26 @@
-<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="./vue.development.js"></script>
-</head>
-<body>
-    <div id="app">
-        <div>{{ message }}</div>
-    </div>
-    <!-- <div id="app">{{ message }}</div> -->
+  <body>
     <script>
-        const { createApp, ref } = Vue
-        createApp({
-            setup() {
-                const message = ref('Hello World!')
-                return {
-                    message
-                }
-            }
-        }).mount('#app')
+      const url = 'http://www.abc.hello123.com:8888'
+      const options = {
+        method: 'GET', // 请求方法
+      }
+
+      fetch(url, options)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.status}`)
+          }
+          return response.json() // 解析响应为 JSON
+        })
+        .then((data) => {
+          // 处理响应数据
+          console.log(data)
+        })
+        .catch((error) => {
+          // 处理异常
+          console.error('There was a problem with the fetch operation:', error)
+        })
     </script>
-</body>
+  </body>
 </html>

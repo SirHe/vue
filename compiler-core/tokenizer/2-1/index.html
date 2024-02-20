@@ -1,0 +1,14 @@
+<html lang="en">
+  <body>
+    <div id="xxx">
+      <div id="app" class="box">hello world</div>
+    </div>
+    <script type="module">
+      import Tokenizer from './tokenizer.js'
+      const sourceCode = document.querySelector('#xxx').innerHTML
+      const tokenizer = new Tokenizer()
+      const result = tokenizer.parse(sourceCode)
+      console.log(result)
+    </script>
+  </body>
+</html>
