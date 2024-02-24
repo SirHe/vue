@@ -1,0 +1,39 @@
+<!-- test.html -->
+<html lang="en">
+  <body>
+    <div id="app">
+      <div id="box1"></div>
+      <div>----------</div>
+      <div id="box2"></div>
+    </div>
+    <script type="module">
+      import { reactive } from './reactive.js'
+      import { effect } from './effect.js'
+      import { sleep } from './utils.js'
+      const render1 = () => {
+        const dom = document.querySelector('#box1')
+        let htmlStr = ''
+        for (let i = 0; i < arr1.length; i++) {
+          htmlStr += `<div>${arr1[i]}</div>`
+        }
+        dom.innerHTML = htmlStr
+      }
+
+      const render2 = () => {
+        const dom = document.querySelector('#box2')
+        dom.innerHTML = arr2[4]
+      }
+
+      const arr1 = reactive([1, 2, 3, 4, 5])
+      const arr2 = reactive([1, 2, 3, 4, 5])
+      effect(render1)
+      effect(render2)
+      const work = async () => {
+        await sleep(1000)
+        arr1[5] = 6
+        arr2.length = 3
+      }
+      work()
+    </script>
+  </body>
+</html>
