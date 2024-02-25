@@ -1,0 +1,14 @@
+<!-- test.html -->
+<html lang="en">
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import { readonly, shallowReadonly } from './reactive.js'
+      const shallowReadonlyData = shallowReadonly({ a: 1 })
+      const readonlyData = readonly({ a: { b: 2 } })
+      shallowReadonlyData.a = 2
+      readonlyData.a.b = 3
+      console.log(shallowReadonlyData.a, readonlyData.a.b)
+    </script>
+  </body>
+</html>

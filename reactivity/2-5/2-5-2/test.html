@@ -1,0 +1,27 @@
+<!-- test.html -->
+<html lang="en">
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import { reactive } from './reactive.js'
+      import { effect } from './effect.js'
+      const render = () => {
+        const dom = document.querySelector('#app')
+        dom.innerHTML = `
+        ${arr.includes(1)}
+        -----------------
+        ${arr.includes(obj)}
+        -----------------
+        ${arr.includes(proxyObj)}
+        -----------------
+        ${arr[2] === proxyObj}
+        `
+      }
+
+      const obj = { a: 3 }
+      const proxyObj = reactive(obj)
+      const arr = reactive([1, 2, obj])
+      effect(render)
+    </script>
+  </body>
+</html>

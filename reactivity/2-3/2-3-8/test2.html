@@ -1,0 +1,26 @@
+<!-- test2.html -->
+<html lang="en">
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import { shallowReactive } from './reactive.js'
+      import { effect } from './effect.js'
+      import { sleep } from './utils.js'
+
+      const render = () => {
+        const dom = document.querySelector('#app')
+        dom.innerHTML = reactivityData.a.b
+      }
+
+      const reactivityData = shallowReactive({ a: { b: 'hello' } })
+      effect(render)
+      const work = async () => {
+        await sleep(1000)
+        reactivityData.a.b = 'world'
+        await sleep(1000)
+        reactivityData.a = { b: 'hello world' }
+      }
+      work()
+    </script>
+  </body>
+</html>
