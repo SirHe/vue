@@ -1,7 +1,23 @@
 // reactive.js
-import { baseHandlers } from './baseHandlers.js'
-import { collectionHandlers } from './collectionHandlers.js'
-import { isObject } from './utils.js'
+import {
+  mutableHandlers,
+  readonlyHandlers,
+  shallowReactiveHandlers,
+  shallowReadonlyHandlers,
+} from './baseHandlers.js'
+import {
+  mutableCollectionHandlers,
+  readonlyCollectionHandlers,
+  shallowCollectionHandlers,
+  shallowReadonlyCollectionHandlers,
+} from './collectionHandlers.js'
+import { ReactiveFlags } from './constants.js'
+import { isObject, toRawType } from './utils.js'
+
+export const reactiveMap = new WeakMap()
+export const shallowReactiveMap = new WeakMap()
+export const readonlyMap = new WeakMap()
+export const shallowReadonlyMap = new WeakMap()
 
 const TargetType = {
   INVALID: 0,
@@ -34,6 +50,71 @@ export const reactive = (target) => {
     return target
   }
 
+  if (isReadonly(target)) {
+    return target
+  }
+  return createReactiveObject(
+    target,
+    false,
+    mutableHandlers,
+    mutableCollectionHandlers,
+    reactiveMap
+  )
+}
+
+export function shallowReactive(target) {
+  return createReactiveObject(
+    target,
+    false,
+    shallowReactiveHandlers,
+    shallowCollectionHandlers,
+    shallowReactiveMap
+  )
+}
+
+export function readonly(target) {
+  return createReactiveObject(
+    target,
+    true,
+    readonlyHandlers,
+    readonlyCollectionHandlers,
+    readonlyMap
+  )
+}
+
+export function shallowReadonly(target) {
+  return createReactiveObject(
+    target,
+    true,
+    shallowReadonlyHandlers,
+    shallowReadonlyCollectionHandlers,
+    shallowReadonlyMap
+  )
+}
+
+function createReactiveObject(
+  target,
+  isReadonly,
+  baseHandlers,
+  collectionHandlers,
+  proxyMap
+) {
+  if (!isObject(target)) {
+    return target
+  }
+  // target is already a Proxy, return it.
+  if (
+    target[ReactiveFlags.RAW] &&
+    !(isReadonly && target[ReactiveFlags.IS_REACTIVE])
+  ) {
+    return target
+  }
+  // target already has corresponding Proxy
+  const existingProxy = proxyMap.get(target)
+  if (existingProxy) {
+    return existingProxy
+  }
+  // only specific value types can be observed.
   const targetType = getTargetType(target)
   if (targetType === TargetType.INVALID) {
     return target
@@ -42,8 +123,12 @@ export const reactive = (target) => {
     target,
     targetType === TargetType.COLLECTION ? collectionHandlers : baseHandlers
   )
-
+  proxyMap.set(target, proxy)
   return proxy
+}
+
+export function isReadonly(value) {
+  return !!(value && value[ReactiveFlags.IS_READONLY])
 }
 
 export const RAW = Symbol('raw')
