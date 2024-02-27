@@ -4,15 +4,14 @@ import {
   MAP_KEY_ITERATE_KEY,
   track,
   trigger,
-} from './reactiveEffect.js'
+} from './effect.js'
 import { ReactiveFlags, TrackOpTypes, TriggerOpTypes } from './constants.js'
-import { capitalize, hasChanged, hasOwn, isMap, toRawType } from './utils.js'
+import { capitalize, hasChanged, hasOwn, isMap, toRawType, getProto } from './utils.js'
 
 
 const toShallow = (value) => value
 
-const getProto = (v) =>
-  Reflect.getPrototypeOf(v)
+
 
 function get(
   target,
@@ -65,19 +64,19 @@ function size(target, isReadonly = false) {
   return Reflect.get(target, 'size', target)
 }
 
-function add(this, value) {
+function add(value) {
   value = toRaw(value)
   const target = toRaw(this)
   const proto = getProto(target)
   const hadKey = proto.has.call(target, value)
   if (!hadKey) {
     target.add(value)
-    trigger(target, TriggerOpTypes.ADD, value, value)
+    trigger(target, TriggerOpTypes.ADD, value)
   }
   return this
 }
 
-function set(this, key, value) {
+function set(key, value) {
   value = toRaw(value)
   const target = toRaw(this)
   const { has, get } = getProto(target)
@@ -86,8 +85,6 @@ function set(this, key, value) {
   if (!hadKey) {
     key = toRaw(key)
     hadKey = has.call(target, key)
-  } else if (__DEV__) {
-    checkIdentityKeys(target, has, key)
   }
 
   const oldValue = get.call(target, key)
@@ -107,8 +104,6 @@ function deleteEntry(this, key) {
   if (!hadKey) {
     key = toRaw(key)
     hadKey = has.call(target, key)
-  } else if (__DEV__) {
-    checkIdentityKeys(target, has, key)
   }
 
   const oldValue = get ? get.call(target, key) : undefined
@@ -202,13 +197,6 @@ function createIterableMethod(
 
 function createReadonlyMethod(type) {
   return function (this, ...args) {
-    if (__DEV__) {
-      const key = args[0] ? `on key "${args[0]}" ` : ``
-      console.warn(
-        `${capitalize(type)} operation ${key}failed: target is readonly.`,
-        toRaw(this),
-      )
-    }
     return type === TriggerOpTypes.DELETE
       ? false
       : type === TriggerOpTypes.CLEAR
@@ -335,6 +323,7 @@ function createInstrumentationGetter(isReadonly, shallow) {
     key,
     receiver,
   ) => {
+    
     if (key === ReactiveFlags.IS_REACTIVE) {
       return !isReadonly
     } else if (key === ReactiveFlags.IS_READONLY) {

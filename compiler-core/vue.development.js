@@ -1400,7 +1400,6 @@ var Vue = (function (exports) {
     if (targetType === 0 /* INVALID */) {
       return target
     }
-    debugger
     const proxy = new Proxy(
       target,
       targetType === 2 /* COLLECTION */ ? collectionHandlers : baseHandlers
@@ -12866,7 +12865,6 @@ var Vue = (function (exports) {
      * States that are more likely to be hit are higher up, as a performance improvement.
      */
     parse(input) {
-      debugger
       this.buffer = input
       while (this.index < this.buffer.length) {
         const c = this.buffer.charCodeAt(this.index)

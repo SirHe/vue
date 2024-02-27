@@ -7,6 +7,8 @@ export const hasOwn = (val, key) => hasOwnProperty.call(val, key)
 export const objectToString = Object.prototype.toString
 export const toTypeString = (value) => objectToString.call(value)
 export const toRawType = (value) => {
-  // extract "RawType" from strings like "[object RawType]"
-  return toTypeString(value).slice(8, -1)
+    // extract "RawType" from strings like "[object RawType]"
+    return toTypeString(value).slice(8, -1)
 }
+export const getProto = (v) =>
+    Reflect.getPrototypeOf(v)
