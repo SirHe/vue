@@ -12,3 +12,5 @@ export const toRawType = (value) => {
 }
 export const getProto = (v) =>
     Reflect.getPrototypeOf(v)
+export const hasChanged = (value, oldValue) =>
+    !Object.is(value, oldValue)

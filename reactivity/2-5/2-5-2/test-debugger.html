@@ -13,9 +13,7 @@
     const { createApp, ref, reactive } = Vue
     const set = new Set([1,2,3])
     const hello = reactive(set)
-    const world = reactive([1,2,3])
     hello.a = 123
-    world.a = 123
     setTimeout(() => {
         hello.a = 456
         // hello.delete(1)
@@ -25,8 +23,7 @@
     createApp({
         setup() {
             return {
-                hello,
-                world
+                hello
             }
         }
     }).mount('#app')

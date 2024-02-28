@@ -1014,6 +1014,7 @@ var Vue = (function (exports) {
   const toShallow = (value) => value
   const getProto = (v) => Reflect.getPrototypeOf(v)
   function get(target, key, isReadonly = false, isShallow = false) {
+    debbuger
     target = target['__v_raw']
     const rawTarget = toRaw(target)
     const rawKey = toRaw(key)

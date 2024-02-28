@@ -64,7 +64,7 @@ export const trigger = (target, type, key) => {
         return
     }
     const keys = [key]
-    if (type === TriggerOpTypes.ADD || type === TriggerOpTypes.DELETE) {
+    if (type === TriggerOpTypes.ADD || type === TriggerOpTypes.DELETE || type === TriggerOpTypes.CLEAR) {
         keys.push(ITERATE_KEY)
     }
     let fnSet = []

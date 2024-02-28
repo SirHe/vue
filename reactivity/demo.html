@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../compiler-core/vue.development.js"></script>
+</head>
+
+<body>
+    <div id="app">hello</div>
+    <script>
+        const { reactive, effect } = Vue
+        const data = {
+            age: 17,
+            name: 'xxx',
+            ID: 123
+        }
+
+        const sleep = (s) => new Promise(r => setTimeout(r, s * 1000))
+
+        const notifyFriends = () => {
+            console.log('朋友收到通知')
+        }
+
+        const notifyGovernment = () => {
+            console.log('身份信息变化')
+        }
+
+        const reactiveData = reactive(data)
+
+        effect(() => {
+            reactiveData.age
+            notifyFriends()
+        })
+
+        effect(() => {
+            reactiveData.name
+            reactiveData.ID
+            notifyGovernment()
+        })
+
+        
+        const work = async () => {
+            await sleep(1)
+            reactiveData.age = 18
+            await sleep(2)
+            reactiveData.ID = 456
+        }
+
+        work()
+
+    </script>
+</body>
+
+</html>

@@ -59,7 +59,7 @@ function has(this, key, isReadonly = false) {
 }
 
 function size(target, isReadonly = false) {
-  target = target[ReactiveFlags.RAW]
+  target = toRaw(target)
   !isReadonly && track(toRaw(target), TrackOpTypes.ITERATE, ITERATE_KEY)
   return Reflect.get(target, 'size', target)
 }
@@ -79,54 +79,43 @@ function add(value) {
 function set(key, value) {
   value = toRaw(value)
   const target = toRaw(this)
-  const { has, get } = getProto(target)
 
-  let hadKey = has.call(target, key)
+  let hadKey = target.has(key)
   if (!hadKey) {
     key = toRaw(key)
-    hadKey = has.call(target, key)
+    hadKey = target.has(key)
   }
-
-  const oldValue = get.call(target, key)
+  const oldValue = target.get(key)
   target.set(key, value)
   if (!hadKey) {
-    trigger(target, TriggerOpTypes.ADD, key, value)
+    trigger(target, TriggerOpTypes.ADD, key)
   } else if (hasChanged(value, oldValue)) {
-    trigger(target, TriggerOpTypes.SET, key, value, oldValue)
+    trigger(target, TriggerOpTypes.SET, key)
   }
   return this
 }
 
-function deleteEntry(this, key) {
-  const target = toRaw(this)
-  const { has, get } = getProto(target)
-  let hadKey = has.call(target, key)
-  if (!hadKey) {
-    key = toRaw(key)
-    hadKey = has.call(target, key)
+function deleteEntry(key) {
+    const target = toRaw(this)
+    let hadKey = target.has(key)
+    if (!hadKey) {
+      key = toRaw(key)
+      hadKey = target.has(key)
+    }
+  
+    const result = target.delete(key)
+    if (hadKey) {
+      trigger(target, TriggerOpTypes.DELETE, key)
+    }
+    return result
   }
 
-  const oldValue = get ? get.call(target, key) : undefined
-  // forward the operation before queueing reactions
-  const result = target.delete(key)
-  if (hadKey) {
-    trigger(target, TriggerOpTypes.DELETE, key, undefined, oldValue)
-  }
-  return result
-}
-
-function clear(this) {
+function clear() {
   const target = toRaw(this)
   const hadItems = target.size !== 0
-  const oldTarget = __DEV__
-    ? isMap(target)
-      ? new Map(target)
-      : new Set(target)
-    : undefined
-  // forward the operation before queueing reactions
   const result = target.clear()
   if (hadItems) {
-    trigger(target, TriggerOpTypes.CLEAR, undefined, undefined, oldTarget)
+    trigger(target, TriggerOpTypes.CLEAR, undefined)
   }
   return result
 }

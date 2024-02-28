@@ -9,4 +9,5 @@ export const TriggerOpTypes = {
   SET: 'set', // 改
   ADD: 'add', // 增
   DELETE: 'delete', // 删
+  CLEAR: 'clear', // 清空
 }
