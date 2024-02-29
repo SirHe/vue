@@ -14,3 +14,5 @@ export const getProto = (v) =>
     Reflect.getPrototypeOf(v)
 export const hasChanged = (value, oldValue) =>
     !Object.is(value, oldValue)
+export const isMap = (val) =>
+    toTypeString(val) === '[object Map]'
