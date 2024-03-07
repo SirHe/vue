@@ -7250,6 +7250,7 @@ var Vue = (function (exports) {
       slotScopeIds = null,
       optimized = isHmrUpdating ? false : !!n2.dynamicChildren
     ) => {
+        debugger
       if (n1 === n2) {
         return
       }
